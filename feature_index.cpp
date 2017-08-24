@@ -64,14 +64,6 @@ Allocator::Allocator()
 
 Allocator::~Allocator() {}
 
-Path *Allocator::newPath(size_t thread_id) {
-  return path_freelist_[thread_id].alloc();
-}
-
-Node *Allocator::newNode(size_t thread_id) {
-  return node_freelist_[thread_id].alloc();
-}
-
 void Allocator::clear() {
   feature_cache_->clear();
   char_freelist_->free();
@@ -98,8 +90,8 @@ void Allocator::init() {
   path_freelist_.reset(new FreeList<Path> [thread_num_]);
   node_freelist_.reset(new FreeList<Node> [thread_num_]);
   for (size_t i = 0; i < thread_num_; ++i) {
-    path_freelist_[i].set_size(8192 * 16);
-    node_freelist_[i].set_size(8192);
+    path_freelist_[i].set_size(8192);
+    node_freelist_[i].set_size(512);
   }
 }
 

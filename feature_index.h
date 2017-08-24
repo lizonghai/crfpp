@@ -30,8 +30,17 @@ class Allocator {
   virtual ~Allocator();
 
   char *strdup(const char *str);
-  Path *newPath(size_t thread_id);
-  Node *newNode(size_t thread_id);
+
+  Path *newPath(size_t thread_id)
+  {
+      return path_freelist_[thread_id].alloc();
+  }
+
+  Node *newNode(size_t thread_id)
+  {
+      return node_freelist_[thread_id].alloc();
+  }
+
   void clear();
   void clear_freelist(size_t thread_id);
   FeatureCache *feature_cache() const;

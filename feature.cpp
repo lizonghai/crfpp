@@ -148,8 +148,10 @@ void FeatureIndex::rebuildFeatures(TaggerImpl *tagger) const {
       for (size_t i = 0; i < y_.size(); ++i) {
         Path *p = allocator->newPath(thread_id);
         p->clear();
-        p->add(tagger->node(cur - 1, j),
-               tagger->node(cur,     i));
+        p->lnode = tagger->node(cur - 1, j);
+        p->rnode = tagger->node(cur,     i);
+        p->lnode->rpath.push_back(p);
+        p->rnode->lpath.push_back(p);
         p->fvector = f;
       }
     }
